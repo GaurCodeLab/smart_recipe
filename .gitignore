@@ -1,0 +1,23 @@
+# Virtual environment
+env/
+venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Django specific
+db.sqlite3
+*.log
+*.pot
+
+# Environment variables
+.env
+
+# OS-specific
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# IDE-specific
+.vscode/
+.idea/
