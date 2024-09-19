@@ -7,8 +7,8 @@ from django.contrib.auth import get_user_model
 class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'description', 'user', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']
+        fields = ['id', 'name','user', 'description', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at', 'user']
         
         
         
