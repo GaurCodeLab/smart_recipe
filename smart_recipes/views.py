@@ -14,10 +14,20 @@ from django.contrib.auth import authenticate
 import requests
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from requests.exceptions import RequestException
+from django.core.cache import cache
+from django.http import HttpResponse
+import time
+from django.views.decorators.cache import cache_page
+from django_redis import get_redis_connection
+from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 
 # Create your views here.
-
-
+def test_redis_view(request):
+    redis_conn = get_redis_connection("default")
+    redis_conn.set("test_key", "hello from django")
+    value = redis_conn.get("test_key")
+    return HttpResponse(f"Redis returned: {value}")
     
     
 #Login user using username and password    
@@ -50,14 +60,16 @@ def register_user(request):
             )    
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
-#Listing the recipes and creating new Recipes   
+    
+    
+@method_decorator(cache_page(60*15), name='dispatch')   
 class RecipeListCreateView(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
    
     def get_permissions(self):
         if self.request.method == 'POST':
-            return [permissions.IsAuthenticated()]
+            return [IsAuthenticated()]
         return []
     
      
